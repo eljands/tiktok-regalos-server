@@ -1,8 +1,7 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-// Tabla de asignación regalo → jugador
 const asignaciones = {
   'Rose': 'Player1',
   'TikTok': 'Player2',
@@ -15,7 +14,6 @@ const asignaciones = {
   'Guardian Wings': 'Player9',
 };
 
-// Almacenamiento temporal de nombres por jugador
 const jugadores = {
   Player1: null,
   Player2: null,
@@ -28,7 +26,9 @@ const jugadores = {
   Player9: null,
 };
 
-// Middleware
+// Guardar el último regalo recibido
+let ultimoRegalo = null;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -45,6 +45,7 @@ app.all('/webhook', (req, res) => {
       nombre: userName,
       timestamp: Date.now()
     };
+    ultimoRegalo = { userName, giftName }; // Guardamos el último regalo
     console.log(`✅ Asignado ${userName} a ${jugador}`);
   } else {
     console.log(`❌ Regalo no asignado: ${giftName}`);
@@ -53,13 +54,23 @@ app.all('/webhook', (req, res) => {
   res.sendStatus(200);
 });
 
-// Endpoint para que Roblox consulte los nombres
+// Endpoint para que Roblox consulte nombres
 app.get('/nombres', (req, res) => {
   res.json(jugadores);
 });
-// Ruta para devolver los datos actuales de asignación por regalo
+
+// Endpoint para consultar la tabla de asignación
 app.get('/asignaciones', (req, res) => {
-  res.json(asignaciones); // Esto lo agregamos en el servidor antes
+  res.json(asignaciones);
+});
+
+// 🔥 NUEVO: Endpoint para consultar el último regalo
+app.get('/ultimo', (req, res) => {
+  if (ultimoRegalo) {
+    res.json(ultimoRegalo);
+  } else {
+    res.json({ userName: "", giftName: "" });
+  }
 });
 
 app.listen(port, () => {
