@@ -74,5 +74,5 @@ app.get('/ultimo', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`✅ Servidor activo en http://localhost:${port}/webhook`);
+  console.log(`✅ Servidor activo en puerto ${port}`);
 });
