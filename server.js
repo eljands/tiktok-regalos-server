@@ -316,7 +316,7 @@ app.all('/webhook', (req, res) => {
       actividadUsuarios[userNameNorm] = Math.floor(Date.now() / 1000);
     }
 
-    // --- A. PROCESAMIENTO DE AFILIACIÓN CON PRIORIDAD ---
+   // --- A. PROCESAMIENTO DE AFILIACIÓN CON PRIORIDAD ---
     let nuevaAfiliacion = null;
 
     if (giftId && CONFIG.giftIdAffiliations[giftId]) {
@@ -331,6 +331,21 @@ app.all('/webhook', (req, res) => {
         afiliaciones[userNameNorm] = nuevaAfiliacion;
         estadisticas.totalCambiosAfiliacion++;
         logDebug("AFILIACION", `🔗 Usuario ${userNameNorm} asignado con éxito a ${nuevaAfiliacion}`);
+        
+        // 👇 NUEVA SEÑAL: Le avisamos a Roblox que alguien se unió por el chat 👇
+        globalEventId++;
+        eventQueue.push({
+          eventId: globalEventId,
+          partidaId: partidaId,
+          timestamp: Math.floor(Date.now() / 1000),
+          player: nuevaAfiliacion,
+          username: rawUserName,
+          giftId: "0000",
+          giftName: "Join",
+          coins: 0,
+          type: "join", // El tipo ahora es "join" en lugar de "coins"
+          subType: "chat"
+        });
       }
     }
 
