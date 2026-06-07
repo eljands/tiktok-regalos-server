@@ -27,10 +27,15 @@ const CONFIG = {
 
   // Método 1: Afiliación por Gift ID
   giftIdAffiliations: {
-    "1001": "Player1",
-    "1002": "Player2",
-    "1003": "Player3",
-    "1009": "Player9"
+    "5655": "Player1",
+    "5269": "Player2",
+    "8239": "Player3",
+    "5827": "Player4",
+    "7032": "Player5",
+    "7096": "Player6",
+    "6064": "Player7",
+    "13651": "Player8",
+    "15104": "Player9"
   },
   
   // Método 2: Afiliación por Comentario 
