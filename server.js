@@ -247,15 +247,6 @@ setInterval(() => {
         delete actividadUsuarios[user];
       }
     }
-app.all('/webhook', (req, res) => {
-  try {
-    const payload = { ...req.query, ...req.body };
-    
-    // 👇 AÑADE ESTA LÍNEA PARA VER TODO LO QUE LLEGA 👇
-    console.log("📥 DATOS CRUDOS RECIBIDOS:", payload);
-    
-    let rawUserName = getUsername(payload);
-    // ... resto de tu código ...
     
     // Limpieza de la caché de duplicados obsoleta para liberar memoria
     for (const [hash, expiration] of cacheDuplicados.entries()) {
@@ -279,6 +270,9 @@ app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.all('/webhook', (req, res) => {
   try {
     const payload = { ...req.query, ...req.body };
+
+    // 👇 LÍNEA PARA VER TODOS LOS DATOS CRUDOS 👇
+    console.log("📥 DATOS CRUDOS RECIBIDOS:", payload);
     
     let rawUserName = getUsername(payload);
     let giftName = getGiftName(payload);
@@ -362,9 +356,6 @@ app.all('/webhook', (req, res) => {
           const nuevoEvento = crearEventoRoblox(playerAfiliado, rawUserName, giftId, giftName, coins);
           timestampsEventos.push(Date.now());
 
-          // [MEJORA FUTURA] Cuando el historial escale a cientos de miles de eventos, 
-          // considerar reemplazar shift() por un puntero circular o LinkedList.
-          // Para la escala actual, el impacto no es notable.
           if (eventQueue.length >= CONFIG.maxEventHistory) {
             eventQueue.shift(); 
             logDebug("QUEUE", `⚠️ Límite del búfer alcanzado. Evento antiguo desplazado.`);
