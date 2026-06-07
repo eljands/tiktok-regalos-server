@@ -547,7 +547,34 @@ app.get('/estado', (req, res) => {
 // ==========================================
 // 7. INICIO DEL SERVIDOR
 // ==========================================
-
+// ==========================================
+// 8. SINCRONIZACIÓN DINÁMICA DESDE ROBLOX
+// ==========================================
+app.post('/set-names', (req, res) => {
+  try {
+    const nombres = req.body;
+    
+    // Limpiamos la memoria de nombres anteriores
+    for (const key in normalizedCommentConfig) {
+      delete normalizedCommentConfig[key];
+    }
+    
+    // Asignamos los nuevos nombres dinámicos recibidos de Roblox
+    for (const slot in nombres) {
+      const nombreReal = nombres[slot];
+      const normalizedKey = normalizeCommentRobust(nombreReal);
+      if (normalizedKey) {
+        normalizedCommentConfig[normalizedKey] = slot;
+        logDebug("NAMES", `✅ Enlace automático: Si comentan "${normalizedKey}" se asignan a ${slot}`);
+      }
+    }
+    
+    res.json({ success: true, message: "Nombres sincronizados con éxito" });
+  } catch (error) {
+    logDebug("ERROR", `Fallo al recibir nombres de Roblox: ${error.message}`, true);
+    res.status(500).json({ error: error.message });
+  }
+});
 app.listen(port, () => {
   console.log(`✅ Servidor intermediario profesional activo en puerto ${port}`);
 });
