@@ -247,6 +247,15 @@ setInterval(() => {
         delete actividadUsuarios[user];
       }
     }
+app.all('/webhook', (req, res) => {
+  try {
+    const payload = { ...req.query, ...req.body };
+    
+    // 👇 AÑADE ESTA LÍNEA PARA VER TODO LO QUE LLEGA 👇
+    console.log("📥 DATOS CRUDOS RECIBIDOS:", payload);
+    
+    let rawUserName = getUsername(payload);
+    // ... resto de tu código ...
     
     // Limpieza de la caché de duplicados obsoleta para liberar memoria
     for (const [hash, expiration] of cacheDuplicados.entries()) {
