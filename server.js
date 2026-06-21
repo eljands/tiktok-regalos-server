@@ -35,6 +35,7 @@ const CONFIG = {
     "7096": "Player6",
     "6064": "Player7",
     "13651": "Player8",
+    "15232": "Player8",
     "15104": "Player9"
   },
 
