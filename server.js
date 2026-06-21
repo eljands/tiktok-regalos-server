@@ -34,7 +34,7 @@ const CONFIG = {
     "7032": "Player5",
     "7096": "Player6",
     "6064": "Player7",
-    "13651": "Player8",
+    "null": "Player8",
     "15232": "Player8",
     "15104": "Player9"
   },
